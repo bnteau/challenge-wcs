@@ -1,64 +1,78 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { useState, useEffect } from 'react';
+import { getNames, addName } from '../data/database';
 
 export default function Home() {
+
+  const [argos, setArgos] = useState([]);
+  const [input, setInput] = useState("");
+
+  // get names from database
+  useEffect(() => {
+    getNames().then (res => setArgos(res.data));
+  }, []);
+
+  const handleChange = (event) => {
+    setInput(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('submission', input);
+
+    // function to add a new name at form submission
+    addName(input).then((res) => {
+      // have to modify this to be cooler
+      window.alert("Argonaute ajouté, félicitations !");
+    });
+    
+    // input to be empty
+    setInput("");
+  }
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Jason &amp; les Argonautes</title>
+        <link rel="icon" href="/jasicon.ico" />
       </Head>
 
+      <header className={styles.header}>
+        <h1>Jason &amp; les Argonautes</h1>
+      </header>
+
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h2>Ajouter un(e) Argonaute</h2>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className={styles.form}>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Indiquez le nom de l&apos;Argonaute"
+              onChange={handleChange}
+              value={input}
+            />
+            <button>Ajouter</button>
+          </form>         
+          
         </div>
+
+        {/* REMPLACER LISTE PAR TABLEAU */}
+        <ul>
+          {argos.map((argo) => (
+            <li key={argo.name}>{argo.name}</li>
+          ))}
+        </ul>
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
+        <div>
+          <p>Départ de Pagasae, Thessalie</p>
+          <p>Bateau : L'Argo</p>
+          <p>Equipage : 50</p>
+        </div>
       </footer>
     </div>
   )
