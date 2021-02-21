@@ -11,7 +11,7 @@ export default function Home() {
   // get names from database
   useEffect(() => {
     getNames().then (res => setArgos(res.data));
-  }, []);
+  }, [argos]);
 
   const handleChange = (event) => {
     setInput(event.target.value);
