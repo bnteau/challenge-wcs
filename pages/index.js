@@ -7,11 +7,13 @@ export default function Home() {
 
   const [argos, setArgos] = useState([]);
   const [input, setInput] = useState("");
-
+  
   // get names from database
+  const refresh = () => getNames().then (res => setArgos(res.data));
+  
   useEffect(() => {
-    getNames().then (res => setArgos(res.data));
-  }, [argos]);
+    refresh();
+  }, []);
 
   const handleChange = (event) => {
     setInput(event.target.value);
@@ -25,6 +27,7 @@ export default function Home() {
     addName(input).then((res) => {
       // have to modify this to be cooler
       window.alert("Argonaute ajouté, félicitations !");
+      refresh();
     });
     
     // input to be empty
@@ -59,7 +62,6 @@ export default function Home() {
           
         </div>
 
-        {/* REMPLACER LISTE PAR TABLEAU */}
         <ul>
           {argos.map((argo) => (
             <li key={argo.name}>{argo.name}</li>
