@@ -2,7 +2,6 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import { useState, useEffect } from 'react';
 import { getNames, addName } from '../data/database';
-import { notification } from 'antd';
 
 export default function Home() {
 
@@ -20,27 +19,12 @@ export default function Home() {
     setInput(event.target.value);
   }
 
-  const openNotification = () => {
-    notification.open({
-      message: 'Notification Title',
-      description:
-        'Salut toi',
-      onClick: () => {
-        console.log('Notification Clicked!');
-      },
-    });
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('submission', input);
 
-    // openNotification();
-
     // function to add a new name at form submission
     addName(input).then((res) => {
-      // have to modify this to be cooler
-      window.alert("Argonaute ajouté, félicitations !");
       refresh();
     });
     
@@ -78,7 +62,7 @@ export default function Home() {
 
         <ul>
           {argos.map((argo, id) => (
-            <li key={argo.name} onClick={openNotification}>{id + 1} - {argo.name}</li>
+            <li key={argo.name}>{id + 1} - {argo.name}</li>
           ))}
         </ul>
       </main>
